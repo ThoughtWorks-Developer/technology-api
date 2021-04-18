@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: technology-api
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
