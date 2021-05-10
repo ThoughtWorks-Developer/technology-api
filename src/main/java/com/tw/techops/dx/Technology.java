@@ -40,4 +40,7 @@ public class Technology {
 
     @Column(name = "TAGS")
     private String tags;
+
+    @Column(name = "VERSIONS")
+    private String versions;
 }
