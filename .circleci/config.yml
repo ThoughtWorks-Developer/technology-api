@@ -26,7 +26,7 @@ jobs:
       - run:
           name: Building docker image
           command: |
-            docker build -t $IMAGE_NAME:latest .
+            docker build -t developerexp/technology-api:latest .
   publish-latest:
     executor: docker-publisher
     steps:
