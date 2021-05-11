@@ -23,7 +23,7 @@ jobs:
       - run:
           name: Building docker image
           command: |
-            docker build -t $IMAGE_NAME:latest . Dockerfile.Dockerfile
+            docker build -t $IMAGE_NAME:latest . -f Dockerfile.Dockerfile
   publish-latest:
     executor: docker-publisher
     steps:
