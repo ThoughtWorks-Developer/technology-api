@@ -16,8 +16,8 @@ workflows:
           executor: java15
       - docker/publish:
           image: thoughtworks-developer/technology-api
-          tag: latest
-          registry: demo.goharbor.io/api/v2.0
+          tag: 0.0.2
+          registry: demo.goharbor.io
           pre-steps:
             - secrethub/env-export:
                 secret-path: thoughtworks-developer/technology-api/harbor/user

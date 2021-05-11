@@ -23,9 +23,10 @@ secrethub init
 secrethub org init thoughtworks-developer
 secrethub repo init thoughtworks-developer/technology-api
 secrethub service init thoughtworks-developer/technology-api --permission read --clip
-secrethub mkdir thoughtworks-developer/technology-api/docker
-secrethub write thoughtworks-developer/technology-api/docker/user
-secrethub write thoughtworks-developer/technology-api/docker/password
+
+secrethub mkdir thoughtworks-developer/technology-api/dockerhub
+secrethub write thoughtworks-developer/technology-api/dockerhub/user
+secrethub write thoughtworks-developer/technology-api/dockerhub/password
 
 
 secrethub mkdir thoughtworks-developer/technology-api/harbor
@@ -35,7 +36,7 @@ secrethub write thoughtworks-developer/technology-api/harbor/password
 ```
 
 ```
-secrethub rm -r thoughtworks-developer/technology-api/docker
+secrethub rm -r thoughtworks-developer/technology-api/dockerhub
 secrethub service ls thoughtworks-developer/technology-api
 secrethub repo revoke thoughtworks-developer/technology-api s-ktw7j5Cth4Fm
 secrethub repo rm thoughtworks-developer/technology-api
@@ -47,7 +48,7 @@ secrethub org rm thoughtworks-developer
 ### Tag an image
 
 ```
-docker tag thoughtworks-developer/technology-api demo.goharbor.io/thoughtworks-developer/technology-api:0.0.1
+docker tag thoughtworks-developer/technology-api:latest demo.goharbor.io/thoughtworks-developer/technology-api:0.0.1
 ```
 
 ### Push an image
