@@ -18,11 +18,11 @@ workflows:
           image: developerexp/technology-api
           tag: latest
           pre-steps:
-            - secrethub/export-env:
+            - secrethub/env-export:
                 secret-path: thoughtworks-developer/technology-api/docker/user
                 var-name: DOCKER_LOGIN
             - secrethub/env-export:
-                secret-path: thoughtworks-developer/technology-api/docker/user
+                secret-path: thoughtworks-developer/technology-api/docker/password
                 var-name: DOCKER_PASSWORD
           requires:
             - "maven/test"
