@@ -20,7 +20,8 @@ jobs:
   docker-build:
     executor: docker-publisher
     steps:
-      - setup_remote_docker
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
           name: Building docker image
           command: |
@@ -28,7 +29,8 @@ jobs:
   publish-latest:
     executor: docker-publisher
     steps:
-      - setup_remote_docker
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
           name: Publish Docker Image to Docker Hub
           command: |
