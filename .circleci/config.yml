@@ -6,11 +6,31 @@ jobs:
       - image: cimg/openjdk:15.0.2
     steps:
       - checkout
+      - setup_remote_docker
       - run:
           name: Building technology-api rest service
           command: mvn -B -DskipTests clean package
-
+  docker-build:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - setup_remote_docker
+      - run:
+          name: Building docker image
+          command: docker build -t $DOCKER_NAMESPACE/technology-api:latest .
+  publish-latest:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - setup_remote_docker
+      - run:
+          name: Publish Docker Image to Docker Hub
+          command: |
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
+            docker push $DOCKER_NAMESPACE/technology-api:latest
 workflows:
-  build-api: 
+  build-master: 
     jobs:
       - maven-build
+      - docker-build
+      - publish-latest
