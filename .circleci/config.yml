@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   docker: circleci/docker@1.5.0
   maven: circleci/maven@1.2.0
+  cli: secrethub/cli@1.1.0
 
 executors:
   java15:
@@ -14,7 +15,14 @@ workflows:
       - maven/test:
           executor: java15
       - docker/publish:
-          image: salsiddiqui/technology-api
+          image: developerexp/technology-api
           tag: latest
+          pre-steps:
+            - secrethub/export-env:
+                secret-path: thoughtworks-developer/technology-api/docker/user
+                var-name: DOCKER_LOGIN
+            - secrethub/env-export:
+                secret-path: thoughtworks-developer/technology-api/docker/user
+                var-name: DOCKER_PASSWORD
           requires:
             - "maven/test"
