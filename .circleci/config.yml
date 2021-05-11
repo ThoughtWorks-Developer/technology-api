@@ -18,7 +18,6 @@ jobs:
           name: Building technology-api rest service
           command: mvn -B -DskipTests clean package
   docker-build:
-    working_directory: ./technology-api
     executor: docker-publisher
     steps:
       - setup_remote_docker
