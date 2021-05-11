@@ -17,7 +17,7 @@ workflows:
       - docker/publish:
           image: thoughtworks-developer/technology-api
           tag: latest
-          registry: demo.goharbor.io
+          registry: demo.goharbor.io/api/v2.0
           pre-steps:
             - secrethub/env-export:
                 secret-path: thoughtworks-developer/technology-api/harbor/user
