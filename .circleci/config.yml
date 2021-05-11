@@ -1,4 +1,8 @@
 version: 2.1
+
+orbs:
+  secrethub: secrethub/cli@1.0.0
+
 executors:
   docker-publisher:
     environment:
@@ -23,7 +27,7 @@ jobs:
       - run:
           name: Building docker image
           command: |
-            docker build -t $IMAGE_NAME:latest . -f Dockerfile.Dockerfile
+            docker build -t $IMAGE_NAME:latest .
   publish-latest:
     executor: docker-publisher
     steps:
@@ -40,5 +44,9 @@ workflows:
   build-master: 
     jobs:
       - maven-build
-      - docker-build
-      - publish-latest
+      - docker-build:
+          requires:
+            - maven-build
+      - publish-latest:
+          requires:
+              - docker-build
