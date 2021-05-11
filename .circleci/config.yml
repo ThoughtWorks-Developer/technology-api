@@ -17,7 +17,7 @@ jobs:
       - setup_remote_docker
       - run:
           name: Building docker image
-          command: docker build -t $DOCKER_NAMESPACE/technology-api:latest .
+          command: docker build -t developerexp/technology-api:latest .
   publish-latest:
     docker:
       - image: circleci/buildpack-deps:stretch
