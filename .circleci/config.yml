@@ -7,7 +7,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Building technology-api
+          name: Building technology-api rest service
           command: mvn -B -DskipTests clean package
 
 workflows:
