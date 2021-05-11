@@ -18,6 +18,6 @@ workflows:
     jobs:
       - maven-build
       - docker/publish:
-          image: salsiddiqui/technology-api
+          image: salsiddiqui/technology-api:latest
           requires:
             - maven-build
