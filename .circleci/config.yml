@@ -16,3 +16,5 @@ workflows:
       - docker/publish:
           image: salsiddiqui/technology-api
           tag: latest
+          requires:
+            - "maven/test"
