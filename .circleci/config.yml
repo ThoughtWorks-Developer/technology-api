@@ -18,6 +18,8 @@ workflows:
     jobs:
       - maven-build
       - docker/publish:
-          image: salsiddiqui/technology-api:latest
+          image: salsiddiqui/technology-api
+          tag: latest
+          use-remote-docker: true
           requires:
             - maven-build
