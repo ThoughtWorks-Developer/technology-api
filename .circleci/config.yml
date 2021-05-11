@@ -19,3 +19,5 @@ workflows:
       - maven-build
       - docker/publish:
           image: salsiddiqui/technology-api
+          requires:
+            - maven-build
