@@ -1,12 +1,5 @@
 version: 2.1
 
-executors:
-  docker-publisher:
-    environment:
-      IMAGE_NAME: developerexp/technology-api
-    docker:
-      - image: circleci/buildpack-deps:stretch
-
 jobs:
   maven-build:  
     docker:
@@ -20,11 +13,12 @@ jobs:
   docker-build:
     executor: docker-publisher
     steps:
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 19.03.13
       - run:
           name: Building docker image
           command: |
-            docker build -t $IMAGE_NAME:latest ./Dockerfile
+            docker build -t developerexp/technology-api:latest .
   publish-latest:
     executor: docker-publisher
     steps:
@@ -34,9 +28,9 @@ jobs:
           command: |
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
             IMAGE_TAG="0.0.1"
-            docker tag $IMAGE_NAME:latest $IMAGE_NAME:$IMAGE_TAG
-            docker push $IMAGE_NAME:latest
-            docker push $IMAGE_NAME:$IMAGE_TAG
+            docker tag developerexp/technology-api:latest developerexp/technology-api:$IMAGE_TAG
+            docker push developerexp/technology-api:latest
+            docker push developerexp/technology-api:$IMAGE_TAG
 workflows:
   build-master: 
     jobs:
