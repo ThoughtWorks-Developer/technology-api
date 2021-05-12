@@ -17,9 +17,9 @@ workflows:
       - maven/test:
           executor: java15
       - aws-ecr/build-and-push-image:
-          account-url: 609575337789.dkr.ecr.us-east-2.amazonaws.com
-          aws-access-key-id: secrethub://thoughtworks-developer/technology-api/aws/access_key_id
-          aws-secret-access-key: secrethub://thoughtworks-developer/technology-api/aws/secret_access_key
+          account-url: '609575337789.dkr.ecr.us-east-2.amazonaws.com'
+          aws-access-key-id: 'secrethub://thoughtworks-developer/technology-api/aws/access_key_id'
+          aws-secret-access-key: 'secrethub://thoughtworks-developer/technology-api/aws/secret_access_key'
           create-repo: true
           region: us-east-2
           repo: thoughtworks-developer/technology-api
