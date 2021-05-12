@@ -80,28 +80,13 @@ docker push demo.goharbor.io/thoughtworks-developer/technology-api:0.0.1
 ### Tag a chart for this project
 
 ```
-export HELM_EXPERIMENTAL_OCI=1
-export AWS_ACCOUNT_ID=<AWS Account ID>
-aws ecr create-repository --repository-name thoughtworks-developer/technology-api --region us-east-2
-aws ecr get-login-password --region us-east-2 | helm registry login --username --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.us-east-2.amazonaws.com
-helm chart save charts/. $AWS_ACCOUNT_ID.dkr.ecr.us-east-2.amazonaws.com/thoughtworks-developer/technology-api:0.1.0
+helm chart save charts/. demo.goharbor.io/thoughtworks-developer/technology-api:0.0.2
 ```
 
 ### Push a chart to this project
 
 ```
-helm chart push demo.goharbor.io/thoughtworks-developer/technology-api:0.1.0
+helm chart push demo.goharbor.io/thoughtworks-developer/technology-api:0.0.2
 ```
 
-
-```
-
-
-aws ecr get-login-password --region region | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.us-east-2.amazonaws.com
-```
-
-environment:
-            AWS_DEFAULT_REGION: us-east-2
-            AWS_ECR_ACCOUNT_URL: 609575337789.dkr.ecr.us-east-2.amazonaws.com
-            AWS_ACCESS_KEY_ID: secrethub://thoughtworks-developer/technology-api/aws/access_key_id
-            AWS_SECRET_ACCESS_KEY: secrethub://thoughtworks-developer/technology-api/aws/secret_access_key
+curl --data-binary "@technology-api-0.1.0.tgz" http://localhost:8080/api/charts

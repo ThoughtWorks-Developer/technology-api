@@ -16,15 +16,14 @@ workflows:
       - maven/test:
           executor: java15
       - docker/publish:
-          image: thoughtworks-developer/technology-api
-          tag: 0.0.2
-          registry: demo.goharbor.io
+          image: thoughtworksdeveloper/technology-api
+          tag: 0.0.1
           pre-steps:
             - secrethub/env-export:
-                secret-path: thoughtworks-developer/technology-api/harbor/user
+                secret-path: thoughtworks-developer/technology-api/dockerhub/user
                 var-name: DOCKER_LOGIN
             - secrethub/env-export:
-                secret-path: thoughtworks-developer/technology-api/harbor/password
+                secret-path: thoughtworks-developer/technology-api/dockerhub/password
                 var-name: DOCKER_PASSWORD
           requires:
             - "maven/test"
