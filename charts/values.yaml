@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: thoughtworks-developer/technology-api
+  repository: thoughtworksdeveloper/technology-api
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "0.0.1"
@@ -23,6 +23,22 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
+rbac:
+ create: false
+ role:
+   ## Rules to create. It follows the role specification
+   rules:
+   - apiGroups:
+     - ''
+     resources:
+     - services
+     - endpoints
+     - pods
+     verbs:
+     - get
+     - watch
+     - list
+
 podAnnotations: {}
 
 podSecurityContext: {}
@@ -37,8 +53,10 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: ClusterIP
-  port: 80
+  name: technology-api
+  type: NodePort
+  externalPort: 80
+  internalPort: 8080
 
 ingress:
   enabled: false
@@ -53,24 +71,31 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+resources:
+  limits:
+    cpu: 1000m
+    memory: 256Mi
+  requests:
+    cpu: 250m
+    memory: 128Mi
+probePath: /actuator/health
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 1
+readinessProbe:
+  failureThreshold: 1
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 1
 
 autoscaling:
   enabled: false
-  minReplicas: 1
-  maxReplicas: 100
+  minReplicas: 2
+  maxReplicas: 6
   targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
 
 nodeSelector: {}
 

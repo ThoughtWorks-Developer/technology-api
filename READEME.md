@@ -12,7 +12,8 @@ gh auth login
 helm create technology-api
 mv technology-api charts
 helm lint charts/.
-helm install --dry-run --debug ./charts
+helm template local charts/.
+helm install local --dry-run --debug ./charts
 helm repo add thoughtworks-developer https://demo.goharbor.io/
 helm package charts/.
 ```
