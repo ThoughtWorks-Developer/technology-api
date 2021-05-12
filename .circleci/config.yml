@@ -2,8 +2,10 @@ version: 2.1
 
 orbs:
   docker: circleci/docker@1.5.0
+  aws-ecr: circleci/aws-ecr@7.0.0
   maven: circleci/maven@1.2.0
   secrethub: secrethub/cli@1.1.0
+  helm: circleci/helm@1.2.0
 
 executors:
   java15:
@@ -14,16 +16,12 @@ workflows:
     jobs:
       - maven/test:
           executor: java15
-      - docker/publish:
-          image: thoughtworks-developer/technology-api
-          tag: 0.0.2
-          registry: demo.goharbor.io
-          pre-steps:
-            - secrethub/env-export:
-                secret-path: thoughtworks-developer/technology-api/harbor/user
-                var-name: DOCKER_LOGIN
-            - secrethub/env-export:
-                secret-path: thoughtworks-developer/technology-api/harbor/password
-                var-name: DOCKER_PASSWORD
+      - aws-ecr/build-and-push-image:
+          account-url: 609575337789.dkr.ecr.us-east-2.amazonaws.com
+          aws-access-key-id: secrethub://thoughtworks-developer/technology-api/aws/access_key_id
+          aws-secret-access-key: secrethub://thoughtworks-developer/technology-api/aws/secret_access_key
+          create-repo: true
+          region: us-east-2
+          repo: thoughtworks-developer/technology-api
           requires:
             - "maven/test"
