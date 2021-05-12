@@ -100,3 +100,8 @@ helm chart push demo.goharbor.io/thoughtworks-developer/technology-api:0.1.0
 aws ecr get-login-password --region region | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.us-east-2.amazonaws.com
 ```
 
+environment:
+            AWS_DEFAULT_REGION: us-east-2
+            AWS_ECR_ACCOUNT_URL: 609575337789.dkr.ecr.us-east-2.amazonaws.com
+            AWS_ACCESS_KEY_ID: secrethub://thoughtworks-developer/technology-api/aws/access_key_id
+            AWS_SECRET_ACCESS_KEY: secrethub://thoughtworks-developer/technology-api/aws/secret_access_key
