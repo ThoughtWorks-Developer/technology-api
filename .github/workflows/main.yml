@@ -64,11 +64,10 @@ jobs:
       - uses: chrisdickinson/setup-yq@latest
         env:
           SECRETHUB_CREDENTIAL: ${{ secrets.SECRETHUB_CREDENTIAL }}
-          CONTAINER_REGISTRY_USER: secrethub://thoughtworks-developer/technology-api/git/user
-          CONTAINER_REGISTRY_PASSWORD: secrethub://thoughtworks-developer/technology-api/git/password
+          CONTAINER_REGISTRY_USER: secrethub://thoughtworks-developer/technology-api/github/user
+          CONTAINER_REGISTRY_PASSWORD: secrethub://thoughtworks-developer/technology-api/github/password
       - name: publish helm chart
         run: |
-          export RELEASE_VERSION=$(yq e '.version' charts/Chart.yaml)
           echo "$CONTAINER_REGISTRY_PASSWORD" | helm registry login ${{ env.CONTAINER_REGISTRY }} --username "$CONTAINER_REGISTRY_USER" --password-stdin
-          helm chart save charts/. ${{ env.CONTAINER_REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:$RELEASE_VERSION
-          helm chart push ${{ env.CONTAINER_REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:$RELEASE_VERSION
+          helm chart save charts/. ${{ env.CONTAINER_REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:0.1.0
+          helm chart push ${{ env.CONTAINER_REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:0.1.0
