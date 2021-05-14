@@ -40,7 +40,10 @@ jobs:
         with: 
           name: jarpack
       - name: Build Docker image
-        run: docker build -t $NAMESPACE/$REPOSITORY .
+        run: |
+          echo "downloading jar file: $GITHUB_WORKSPACE/jarpack/*.jar"
+          ls $GITHUB_WORKSPACE/jarpack
+          docker build --build-arg JAR_FILE=$GITHUB_WORKSPACE/jarpack/*.jar $NAMESPACE/$REPOSITORY .
       - uses: secrethub/actions/env-export@v0.1.0
         env:
           APP_VERSION: 0.0.1
