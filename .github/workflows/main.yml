@@ -4,6 +4,7 @@ on: push
 
 env:
   HELM_EXPERIMENTAL_OCI: 1
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
   NAMESPACE: thoughtworks-developer
   REPOSITORY: technology-api
   CONTAINER_REGISTRY: ghcr.io
