@@ -72,3 +72,52 @@ jobs:
           echo "$CONTAINER_REGISTRY_PASSWORD" | helm registry login ${{ env.CONTAINER_REGISTRY }} --username "$CONTAINER_REGISTRY_USER" --password-stdin
           helm chart save charts/. ${{ env.CONTAINER_REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:0.1.0
           helm chart push ${{ env.CONTAINER_REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:0.1.0
+  provision:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install OpenShift
+        uses: redhat-actions/oc-installer@v1
+        with:
+          oc_version: '4.6'
+      - name: Test oc
+        run: oc version --client
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v1
+
+      - name: Test kubectl
+        run:
+          kubectl version --client --short
+
+      - uses: actions/checkout@v2
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1
+        env:
+          # These can be stored in secrets, if desired.
+          OPENSHIFT_USER: salman-siddiqui
+          OPENSHIFT_NAMESPACE: salman-siddiqui-dev
+          OPENSHIFT_TOKEN: sha256~vv6aZ1QizlilTynZB8BX-MUDNF_3TyX2dVYmo77ietw
+          OPENSHIFT_SERVER: https://api.sandbox-m2.ll9k.p1.openshiftapps.com:6443
+
+        with:
+          # URL to your OpenShift cluster.
+          # Refer to Step 2.
+          openshift_server_url: ${{ env.OPENSHIFT_SERVER }}
+
+          # Authentication Token. Can use username and password instead.
+          # Refer to Step 3.
+          openshift_token: ${{ env.OPENSHIFT_TOKEN }}
+
+          # Credentials, if desired instead of token.
+          # Username and password override token if they are set.
+          openshift_username: ${{ env.OPENSHIFT_USER }}
+          openshift_password: ${{ secrets.OPENSHIFT_PASSWORD }}
+
+          # Disables SSL cert checking. Use this if you don't have the certificate authority data.
+          insecure_skip_tls_verify: true
+          # This method is more secure, if the certificate from Step 4 is available.
+          certificate_authority_data: ${{ secrets.CA_DATA }}
+
+          # Optional - this sets your Kubernetes context's current namespace after logging in.
+          namespace: ${{ env.OPENSHIFT_NAMESPACE }}
