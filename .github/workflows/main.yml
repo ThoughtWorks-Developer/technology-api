@@ -41,15 +41,13 @@ jobs:
           name: jarpack
       - name: Build Docker image
         run: |
-          echo "listing current directory"
-          ls
-          docker build --build-arg JAR_FILE=technology-api-0.0.1.jar -t $NAMESPACE/$REPOSITORY .
+          docker build --build-arg JAR_FILE=*.jar -t $NAMESPACE/$REPOSITORY .
       - uses: secrethub/actions/env-export@v0.1.0
         env:
           APP_VERSION: 0.0.1
           SECRETHUB_CREDENTIAL: ${{ secrets.SECRETHUB_CREDENTIAL }}
-          CONTAINER_REGISTRY_USER: secrethub://thoughtworks-developer/technology-api/git/user
-          CONTAINER_REGISTRY_PASSWORD: secrethub://thoughtworks-developer/technology-api/git/password
+          CONTAINER_REGISTRY_USER: secrethub://thoughtworks-developer/technology-api/github/user
+          CONTAINER_REGISTRY_PASSWORD: secrethub://thoughtworks-developer/technology-api/github/password
       - name: push docker image
         run: |
           echo "$CONTAINER_REGISTRY_PASSWORD" | docker login ${{ env.CONTAINER_REGISTRY }} --username "$CONTAINER_REGISTRY_USER" --password-stdin
