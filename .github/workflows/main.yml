@@ -62,6 +62,7 @@ jobs:
       - name: install helm
         uses: Azure/setup-helm@v1
       - uses: chrisdickinson/setup-yq@latest
+      - uses: secrethub/actions/env-export@v0.1.0
         env:
           SECRETHUB_CREDENTIAL: ${{ secrets.SECRETHUB_CREDENTIAL }}
           CONTAINER_REGISTRY_USER: secrethub://thoughtworks-developer/technology-api/github/user
