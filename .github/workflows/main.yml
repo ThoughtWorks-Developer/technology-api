@@ -52,8 +52,8 @@ jobs:
       - name: push docker image
         run: |
           echo "$CONTAINER_REGISTRY_PASSWORD" | docker login ${{ env.CONTAINER_REGISTRY }} --username "$CONTAINER_REGISTRY_USER" --password-stdin
-          docker tag ${{ env.NAMESPACE }}/${{ env.REPOSITORY }} ${{ env.CONTAINER_REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:$APP_VERSION
-          docker push ${{ env.CONTAINER_REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:$APP_VERSION
+          docker tag ${{ env.NAMESPACE }}/${{ env.REPOSITORY }} ${{ env.CONTAINER_REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:0.0.1
+          docker push ${{ env.CONTAINER_REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:0.0.1
   release:
     needs: publish
     runs-on: ubuntu-latest
