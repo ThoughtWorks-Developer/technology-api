@@ -30,12 +30,11 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: jarpack
-          path: ./target
+          path: ./target/*.jar
   publish:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2
         with: 
           name: jarpack
@@ -43,7 +42,7 @@ jobs:
         run: |
           echo "listing current directory"
           ls
-          docker build --build-arg JAR_FILE=*.jar $NAMESPACE/$REPOSITORY .
+          docker build --build-arg JAR_FILE=technology-api-0.0.1.jar $NAMESPACE/$REPOSITORY .
       - uses: secrethub/actions/env-export@v0.1.0
         env:
           APP_VERSION: 0.0.1
