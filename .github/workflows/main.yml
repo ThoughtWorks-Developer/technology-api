@@ -43,7 +43,7 @@ jobs:
         run: |
           echo "listing current directory"
           ls
-          docker build --build-arg JAR_FILE=$GITHUB_WORKSPACE/jarpack/*.jar $NAMESPACE/$REPOSITORY .
+          docker build --build-arg JAR_FILE=*.jar $NAMESPACE/$REPOSITORY .
       - uses: secrethub/actions/env-export@v0.1.0
         env:
           APP_VERSION: 0.0.1
