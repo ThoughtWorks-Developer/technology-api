@@ -26,18 +26,18 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots verify
-      - run: mkdir staging && cp target/*.jar staging
+        run: mvn clean package -Dmaven.test.skip=true
       - uses: actions/upload-artifact@v2
         with:
-          name: Package
-          path: staging
+          name: jarpack
+          path: ./target
   publish:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Build Docker image
-        run: docker build -t $NAMESPACE/$REPOSITORY .
+        run: docker build -t $NAMESPACE/$REPOSITORY . --build-arg JAR_FILE=$GITHUB_WORKSPACE/jarpack/*.jar
       - uses: secrethub/actions/env-export@v0.1.0
         env:
           APP_VERSION: 0.0.1
@@ -50,18 +50,20 @@ jobs:
           docker tag ${{ env.NAMESPACE }}/${{ env.REPOSITORY }} ${{ env.CONTAINER_REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:$APP_VERSION
           docker push ${{ env.CONTAINER_REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:$APP_VERSION
   release:
+    needs: publish
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: install helm
         uses: Azure/setup-helm@v1
+      - uses: chrisdickinson/setup-yq@latest
         env:
-          RELEASE_VERSION: 0.1.0
           SECRETHUB_CREDENTIAL: ${{ secrets.SECRETHUB_CREDENTIAL }}
           CONTAINER_REGISTRY_USER: secrethub://thoughtworks-developer/technology-api/git/user
           CONTAINER_REGISTRY_PASSWORD: secrethub://thoughtworks-developer/technology-api/git/password
       - name: publish helm chart
         run: |
+          export RELEASE_VERSION=$(yq eval '.version' charts/Chart.yaml)
           echo "$CONTAINER_REGISTRY_PASSWORD" | helm registry login ${{ env.CONTAINER_REGISTRY }} --username "$CONTAINER_REGISTRY_USER" --password-stdin
           helm chart save charts/. ${{ env.CONTAINER_REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:$RELEASE_VERSION
           helm chart push ${{ env.CONTAINER_REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:$RELEASE_VERSION
