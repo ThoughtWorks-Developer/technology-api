@@ -101,5 +101,5 @@ helm install snapshot --namespace $NAMESPACE --set imageCredentials.username=$CO
 ## Commit Code
 
 ```
-
+git add . && git commit -m "updated" && git push origin master
 ```
