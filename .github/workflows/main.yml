@@ -68,7 +68,7 @@ jobs:
           CONTAINER_REGISTRY_PASSWORD: secrethub://thoughtworks-developer/technology-api/git/password
       - name: publish helm chart
         run: |
-          export RELEASE_VERSION=$(yq eval '.version' charts/Chart.yaml)
+          export RELEASE_VERSION=$(yq e '.version' charts/Chart.yaml)
           echo "$CONTAINER_REGISTRY_PASSWORD" | helm registry login ${{ env.CONTAINER_REGISTRY }} --username "$CONTAINER_REGISTRY_USER" --password-stdin
           helm chart save charts/. ${{ env.CONTAINER_REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:$RELEASE_VERSION
           helm chart push ${{ env.CONTAINER_REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:$RELEASE_VERSION
