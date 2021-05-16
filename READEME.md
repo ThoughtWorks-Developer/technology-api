@@ -5,6 +5,7 @@
 * Download & Install [Docker Toolbox](https://www.docker.com/products/docker-toolbox) on your computer.
 * ```brew install secrethub```
 * ```brew install yq```
+* ```brew install gh```
 
 ## Setup Environment
 
@@ -28,7 +29,7 @@ cd $REPOSITORY
 ```
 secrethub org init $NAMESPACE
 secrethub repo init $NAMESPACE/$REPOSITORY
-secrethub service init $NAMESPACE/$REPOSITORY --permission write --clip
+
 secrethub mkdir $NAMESPACE/$REPOSITORY/github
 secrethub write $NAMESPACE/$REPOSITORY/github/user
 secrethub write $NAMESPACE/$REPOSITORY/git/password
@@ -38,6 +39,9 @@ secrethub write $NAMESPACE/$REPOSITORY/aws/access_key_id
 secrethub write $NAMESPACE/$REPOSITORY/aws/secret_access_key
 secrethub write $NAMESPACE/$REPOSITORY/containerregistry/user
 secrethub write $NAMESPACE/$REPOSITORY/containerregistry/password
+
+gh auth login --with-token $(secrethub read thoughtworks-developer/technology-api/github/password)
+gh secret set SECRETHUB_CREDENTIAL -b $(secrethub service init $NAMESPACE/$REPOSITORY --permission write) -R $NAMESPACE/$REPOSITORY
 ```
 
 ## Maven Build
@@ -106,3 +110,6 @@ helm install snapshot --namespace $NAMESPACE --set imageCredentials.username=$CO
 git add . && git commit -m "updated" && git push origin master
 ```
 
+helm registry login --username $CONTAINER_REGISTRY_USER --password $CONTAINER_REGISTRY_PASSWORD $CONTAINER_REGISTRY
+helm chart pull ghcr.io/thoughtworks-developer/technology-api:0.1.0
+helm install snapshot --namespace $NAMESPACE --set imageCredentials.username=$CONTAINER_REGISTRY_USER --set imageCredentials.password=$CONTAINER_REGISTRY_PASSWORD ghcr.io/thoughtworks-developer/technology-api:0.1.0
